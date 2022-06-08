@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Enemies/Scripts/BulletShooter.gd" type="Script" id=1]
+[ext_resource path="res://Enemies/Sprites/BulletShooter.png" type="Texture" id=2]
+[ext_resource path="res://Enemies/PlayerDetector.gd" type="Script" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 16, 16 )
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 248.0
+
+[node name="BulletShooter" type="StaticBody2D"]
+collision_layer = 4
+collision_mask = 5
+script = ExtResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource( 1 )
+
+[node name="ShootTime" type="Timer" parent="."]
+wait_time = 3.0
+autostart = true
+
+[node name="PlayerDetector" type="Area2D" parent="."]
+visible = false
+gravity = 0.0
+collision_layer = 0
+collision_mask = 8
+script = ExtResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetector"]
+shape = SubResource( 2 )
+[connection signal="timeout" from="ShootTime" to="." method="_on_ShootTime_timeout"]
+[connection signal="area_entered" from="PlayerDetector" to="PlayerDetector" method="_on_PlayerDetector_area_entered"]
+[connection signal="area_exited" from="PlayerDetector" to="PlayerDetector" method="_on_PlayerDetector_area_exited"]
